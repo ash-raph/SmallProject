@@ -6,6 +6,17 @@
 {% block content %}
     {% for obj in object_list %}
         {{ obj.name }}-{{ obj.distance }}
+        <form   method="post" enctype="multipart/form-data" action="{% url 'like_dislike' obj.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="Like">
+            <input type="submit" value="Like">
+        </form>
+
+        <form   method="post" enctype="multipart/form-data" action="{% url 'like_dislike' obj.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="Dislike">
+            <input type="submit" value="Dislike">
+        </form>
     <br>
     {% endfor %}
 {% endblock %}
