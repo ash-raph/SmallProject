@@ -29,6 +29,11 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'shops.user'
 
+# authentication
+LOGIN_URL = '/account/login'
+LOGIN_REDIRECT_URL = '/admin/'
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -56,7 +61,7 @@ ROOT_URLCONF = 'SmallProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
