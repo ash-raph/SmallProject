@@ -13,8 +13,3 @@ class User(AbstractUser):
     # override User.email:
     email = models.EmailField(unique=True, blank=False, null=False)
     shops = models.ManyToManyField(Shops)
-
-
-
-
-
