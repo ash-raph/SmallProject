@@ -8,6 +8,12 @@ class ShopsListView(ListView):
     model = Shops
     template_name = 'shops_list.html'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        ctx = super(ShopsListView, self).get_context_data(object_list=object_list,
+                                                          **kwargs)
+        ctx.update({'actions': ['Like', 'Dislike']})
+        return ctx
+
 
 class ReactView(View):
     def post(self, request, **kwargs):
@@ -19,4 +25,20 @@ class ReactView(View):
         elif 'Dislike' in request.POST:
             self.request.user.shops.remove(shop_instance)
 
+        elif 'Delete' in request.POST:
+            self.request.user.shops.remove(shop_instance)
+
         return redirect(reverse('list_of_shops'))
+
+
+class LikedShopsListView(ListView):
+    template_name = 'shops_list.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        ctx = super(LikedShopsListView, self).get_context_data(object_list=object_list,
+                                                               **kwargs)
+        ctx.update({'actions': ['Delete', ]})
+        return ctx
+
+    def get_queryset(self):
+        return self.request.user.shops.all()

@@ -4,19 +4,20 @@
 {% block title %} Main page {% endblock %}
 
 {% block content %}
+    <a href="{% url 'list_of_shops' %}">Nearby Shops</a>  <a href="{% url 'list_of_liked_shops' %}">My preferred Shops</a>
+    <br>
     {% for obj in object_list %}
         {{ obj.name }}-{{ obj.distance }}
-        <form   method="post" enctype="multipart/form-data" action="{% url 'like_dislike' obj.pk %}">
-            {% csrf_token %}
-            <input type="hidden" name="Like">
-            <input type="submit" value="Like">
-        </form>
+        {% for action in actions %}
+            <form   method="post" enctype="multipart/form-data" action="{% url 'like_dislike' obj.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name={{action}}>
+                <input type="submit" value={{action}}>
+            </form>
 
-        <form   method="post" enctype="multipart/form-data" action="{% url 'like_dislike' obj.pk %}">
-            {% csrf_token %}
-            <input type="hidden" name="Dislike">
-            <input type="submit" value="Dislike">
-        </form>
-    <br>
+        {% endfor %}
+
+
+        <br>
     {% endfor %}
 {% endblock %}
