@@ -20,13 +20,14 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['username', ]
     # override User.email:
     email = models.EmailField(unique=True, blank=False, null=False)
-    shops = models.ManyToManyField(Shop, through='ShopUser', related_name='users')
+    liked_shops = models.ManyToManyField(Shop, related_name='liked_by')
+    disliked_shops = models.ManyToManyField(Shop, through='ShopUser', related_name='disliked_by')
 
 
 class ShopUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shop_user')
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='shop_user')
-    disliked_at = models.DateTimeField(blank=True, null=True)
+    disliked_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('shop', 'user')
