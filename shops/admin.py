@@ -1,7 +1,7 @@
 from django.contrib import admin
-from shops.models import Shops
+from shops.models import Shop
 
 
-@admin.register(Shops)
+@admin.register(Shop)
 class ShopsAdminView(admin.ModelAdmin):
     list_display = ('name', 'distance')
