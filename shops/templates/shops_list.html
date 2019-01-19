@@ -10,15 +10,24 @@
         {{ obj.name }}-{{ obj.distance }}
 
         {% if main %}
+
             <form   method="post" enctype="multipart/form-data" action="{% url 'like_shop' obj.pk %}">
                 {% csrf_token %}
                 <input type="submit" value="Like">
             </form>
+
+            <form   method="post" enctype="multipart/form-data" action="{% url 'dislike_shop' obj.pk %}">
+                {% csrf_token %}
+                <input type="submit" value="Dislike">
+            </form>
+
         {% else %}
+
             <form   method="post" enctype="multipart/form-data" action="{% url 'remove_shop' obj.pk %}">
                 {% csrf_token %}
                 <input type="submit" value="Remove">
             </form>
+
         {% endif %}
 
 

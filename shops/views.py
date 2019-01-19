@@ -1,8 +1,9 @@
-from django.views.generic import ListView, DeleteView
+from django.views.generic import ListView, DeleteView, UpdateView
 from django.http import HttpResponseRedirect
 from django.views.generic.base import View
 from django.shortcuts import reverse
 from shops.models import Shop, ShopUser
+from django.utils.timezone import now
 
 
 class ShopsListView(ListView):
@@ -49,3 +50,17 @@ class LikedShopsListView(ListView):
 
     def get_queryset(self):
         return self.request.user.shops.all()
+
+
+class DislikeShopView(View):
+    def get_success_url(self):
+        return reverse('list_of_shops')
+
+    def get_object(self):
+        return ShopUser.objects.get(user=self.request.user, shop__id=self.kwargs.get('shop'))
+
+    def post(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.disliked_at = now()
+        obj.save()
+        return HttpResponseRedirect(self.get_success_url())
