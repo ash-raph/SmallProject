@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 from django.db import models
 
 import os
@@ -26,7 +27,7 @@ class User(AbstractUser):
 class ShopUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shop_user')
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='shop_user')
-    disliked_at = models.DateTimeField(blank=True, null=True)
+    disliked_at = models.DateTimeField(default=timezone.datetime(1900, 1, 1), blank=True, null=True)
 
     class Meta:
         unique_together = ('shop', 'user')
