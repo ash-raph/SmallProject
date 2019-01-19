@@ -8,14 +8,18 @@
     <br>
     {% for obj in object_list %}
         {{ obj.name }}-{{ obj.distance }}
-        {% for action in actions %}
-            <form   method="post" enctype="multipart/form-data" action="{% url 'like_dislike' obj.pk %}">
-                {% csrf_token %}
-                <input type="hidden" name={{action}}>
-                <input type="submit" value={{action}}>
-            </form>
 
-        {% endfor %}
+        {% if main %}
+            <form   method="post" enctype="multipart/form-data" action="{% url 'like_shop' obj.pk %}">
+                {% csrf_token %}
+                <input type="submit" value="Like">
+            </form>
+        {% else %}
+            <form   method="post" enctype="multipart/form-data" action="{% url 'remove_shop' obj.pk %}">
+                {% csrf_token %}
+                <input type="submit" value="Remove">
+            </form>
+        {% endif %}
 
 
         <br>

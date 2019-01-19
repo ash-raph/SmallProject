@@ -1,43 +1,50 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DeleteView
+from django.http import HttpResponseRedirect
 from django.views.generic.base import View
-from django.shortcuts import redirect, reverse
-from shops.models import Shop
+from django.shortcuts import reverse
+from shops.models import Shop, ShopUser
 
 
 class ShopsListView(ListView):
     model = Shop
     template_name = 'shops_list.html'
 
+    def get_queryset(self):
+        return super().get_queryset().order_by('distance')
+
     def get_context_data(self, *, object_list=None, **kwargs):
-        ctx = super(ShopsListView, self).get_context_data(object_list=object_list,
-                                                          **kwargs)
-        ctx.update({'actions': ['Like', 'Dislike']})
+        ctx = super().get_context_data(object_list=object_list, **kwargs)
+        ctx.update({'main': True})
         return ctx
 
 
-class ReactView(View):
-    def post(self, request, **kwargs):
-        shop_instance = Shop.objects.filter(pk=kwargs.get('pk')).first()
+class LikeShopView(View):
+    model = ShopUser
 
-        if 'Like' in request.POST:
-            self.request.user.shops.add(shop_instance)
+    def get_success_url(self):
+        return reverse('list_of_shops')
 
-        elif 'Dislike' in request.POST:
-            self.request.user.shops.remove(shop_instance)
+    def post(self, *args, **kwargs):
+        ShopUser(user=self.request.user, shop=Shop.objects.get(pk=kwargs.get('shop'))).save()
+        return HttpResponseRedirect(self.get_success_url())
 
-        elif 'Delete' in request.POST:
-            self.request.user.shops.remove(shop_instance)
 
-        return redirect(reverse('list_of_shops'))
+class RemoveShopView(DeleteView):
+    model = ShopUser
+
+    def get_success_url(self):
+        return reverse("list_of_liked_shops")
+
+    def get_object(self, queryset=None):
+        return ShopUser.objects.get(user=self.request.user, shop__id=self.kwargs.get('shop'))
 
 
 class LikedShopsListView(ListView):
     template_name = 'shops_list.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        ctx = super(LikedShopsListView, self).get_context_data(object_list=object_list,
-                                                               **kwargs)
-        ctx.update({'actions': ['Delete', ]})
+        ctx = super().get_context_data(object_list=object_list, **kwargs)
+        ctx.update({'main': False})
         return ctx
 
     def get_queryset(self):
