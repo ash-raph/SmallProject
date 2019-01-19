@@ -1,9 +1,9 @@
-from django.views.generic import ListView, DeleteView, UpdateView
+from django.views.generic import ListView, DeleteView
 from django.http import HttpResponseRedirect
 from django.views.generic.base import View
-from django.shortcuts import reverse
 from shops.models import Shop, ShopUser
-from django.utils.timezone import now
+from django.utils.timezone import now, timedelta
+from django.shortcuts import reverse
 
 
 class ShopsListView(ListView):
@@ -11,7 +11,13 @@ class ShopsListView(ListView):
     template_name = 'shops_list.html'
 
     def get_queryset(self):
-        return super().get_queryset().order_by('distance')
+        disliked = list(ShopUser.objects.filter(disliked_at__gt=now() + timedelta(hours=2))
+                        .values_list("shop__id", flat=True))
+        liked = list(self.request.user.shops.values_list('id', flat=True))
+
+        return super().get_queryset()\
+            .exclude(pk__in=liked + disliked)\
+            .order_by('distance')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         ctx = super().get_context_data(object_list=object_list, **kwargs)
