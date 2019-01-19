@@ -3,11 +3,12 @@ from django.http import HttpResponseRedirect
 from django.views.generic.base import View
 from django.views.generic import ListView
 from django.shortcuts import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from shops.models import Shop, ShopUser
 
 
-class ShopsListView(ListView):
+class ShopsListView(LoginRequiredMixin, ListView):
     model = Shop
     template_name = 'shops_list.html'
 
@@ -26,7 +27,7 @@ class ShopsListView(ListView):
         return ctx
 
 
-class LikeShopView(View):
+class LikeShopView(LoginRequiredMixin, View):
     model = ShopUser
 
     def get_success_url(self):
@@ -37,7 +38,7 @@ class LikeShopView(View):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class RemoveShopView(View):
+class RemoveShopView(LoginRequiredMixin, View):
     model = ShopUser
 
     def get_success_url(self):
@@ -48,7 +49,7 @@ class RemoveShopView(View):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class LikedShopsListView(ListView):
+class LikedShopsListView(LoginRequiredMixin, ListView):
     template_name = 'shops_list.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -60,7 +61,7 @@ class LikedShopsListView(ListView):
         return self.request.user.liked_shops.all()
 
 
-class DislikeShopView(View):
+class DislikeShopView(LoginRequiredMixin, View):
     def get_success_url(self):
         return reverse('list_of_shops')
 

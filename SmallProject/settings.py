@@ -31,8 +31,8 @@ ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'shops.user'
 
 # authentication
-LOGIN_URL = '/account/login'
-LOGIN_REDIRECT_URL = '/admin/'
+LOGIN_URL = '/accounts/login'
+LOGIN_REDIRECT_URL = '/shops/'
 
 
 # Application definition
