@@ -1,9 +1,10 @@
-from django.views.generic import ListView, DeleteView
+from django.utils.timezone import now, timedelta
 from django.http import HttpResponseRedirect
 from django.views.generic.base import View
-from shops.models import Shop, ShopUser
-from django.utils.timezone import now, timedelta
+from django.views.generic import ListView
 from django.shortcuts import reverse
+
+from shops.models import Shop, ShopUser
 
 
 class ShopsListView(ListView):

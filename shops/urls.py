@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from shops.views import *
+from shops.views import ShopsListView, LikedShopsListView, LikeShopView, RemoveShopView, DislikeShopView
 
 urlpatterns = [
     url(r'^shops/$', ShopsListView.as_view(), name="list_of_shops"),
