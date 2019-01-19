@@ -1,11 +1,11 @@
 from django.views.generic import ListView
 from django.views.generic.base import View
 from django.shortcuts import redirect, reverse
-from shops.models import Shops
+from shops.models import Shop
 
 
 class ShopsListView(ListView):
-    model = Shops
+    model = Shop
     template_name = 'shops_list.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -17,7 +17,7 @@ class ShopsListView(ListView):
 
 class ReactView(View):
     def post(self, request, **kwargs):
-        shop_instance = Shops.objects.filter(pk=kwargs.get('pk')).first()
+        shop_instance = Shop.objects.filter(pk=kwargs.get('pk')).first()
 
         if 'Like' in request.POST:
             self.request.user.shops.add(shop_instance)
