@@ -1,9 +1,10 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, CreateView
 from django.utils.timezone import now, timedelta
 from django.http import HttpResponseRedirect
 from django.views.generic.base import View
-from django.views.generic import ListView
+from shops.forms import CreationUserForm
 from django.shortcuts import reverse
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from shops.models import Shop, ShopUser
 
@@ -73,3 +74,14 @@ class DislikeShopView(LoginRequiredMixin, View):
         obj.disliked_at = now()
         obj.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+class CreateUserView(CreateView):
+    form_class = CreationUserForm
+    template_name = 'create_user.html'
+#    success_url = reverse('list_of_shops')
+
+    def get_success_url(self):
+        return reverse('list_of_shops')
+
+
