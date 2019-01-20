@@ -14,7 +14,8 @@ class ShopsListView(LoginRequiredMixin, ListView):
     template_name = 'shops_list.html'
 
     def get_queryset(self):
-        disliked = list(ShopUser.objects.filter(disliked_at__gt=now() - timedelta(hours=2))
+        disliked = list(ShopUser.objects.filter(disliked_at__gt=now() - timedelta(hours=2),
+                                                user__id=self.request.user.pk)
                         .values_list("shop__id", flat=True))
         liked = list(self.request.user.liked_shops.values_list('id', flat=True))
 
