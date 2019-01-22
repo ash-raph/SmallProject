@@ -1,18 +1,21 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, CreateView
 from django.utils.timezone import now, timedelta
 from django.http import HttpResponseRedirect
 from django.views.generic.base import View
-from django.views.generic import ListView
+from shops.forms import CreationUserForm
 from django.shortcuts import reverse
 
 from shops.models import Shop, ShopUser
 
 
-class ShopsListView(ListView):
+class ShopsListView(LoginRequiredMixin, ListView):
     model = Shop
     template_name = 'shops_list.html'
 
     def get_queryset(self):
-        disliked = list(ShopUser.objects.filter(disliked_at__gt=now() - timedelta(hours=2))
+        disliked = list(ShopUser.objects.filter(disliked_at__gt=now() - timedelta(hours=2),
+                                                user__id=self.request.user.pk)
                         .values_list("shop__id", flat=True))
         liked = list(self.request.user.liked_shops.values_list('id', flat=True))
 
@@ -26,7 +29,7 @@ class ShopsListView(ListView):
         return ctx
 
 
-class LikeShopView(View):
+class LikeShopView(LoginRequiredMixin, View):
     model = ShopUser
 
     def get_success_url(self):
@@ -37,7 +40,7 @@ class LikeShopView(View):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class RemoveShopView(View):
+class RemoveShopView(LoginRequiredMixin, View):
     model = ShopUser
 
     def get_success_url(self):
@@ -48,7 +51,7 @@ class RemoveShopView(View):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class LikedShopsListView(ListView):
+class LikedShopsListView(LoginRequiredMixin, ListView):
     template_name = 'shops_list.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -60,7 +63,7 @@ class LikedShopsListView(ListView):
         return self.request.user.liked_shops.all()
 
 
-class DislikeShopView(View):
+class DislikeShopView(LoginRequiredMixin, View):
     def get_success_url(self):
         return reverse('list_of_shops')
 
@@ -72,3 +75,14 @@ class DislikeShopView(View):
         obj.disliked_at = now()
         obj.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+class CreateUserView(CreateView):
+    form_class = CreationUserForm
+    template_name = 'create_user.html'
+#    success_url = reverse('list_of_shops')
+
+    def get_success_url(self):
+        return reverse('list_of_shops')
+
+

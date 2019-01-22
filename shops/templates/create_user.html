@@ -1,0 +1,15 @@
+{% extends "base_site.html" %}
+
+
+{% block title %} Singn up {% endblock %}
+
+{% block content %}
+
+            <form   method="post" enctype="multipart/form-data" action="{{ request.path }}">
+                {% csrf_token %}
+                {{ form.as_table }}
+                <input type="submit" value="Submit">
+            </form>
+
+        <br>
+{% endblock %}
