@@ -26,13 +26,13 @@
                 <div style="display:flex;">
                     {% if main %}
 
-                        <form method="post" enctype="multipart/form-data" action="{% url 'like_shop' obj.pk %}" style="margin-right: 25px;margin-left: 5px;">
+                        <form method="post" class="ajax_call" enctype="multipart/form-data" action="{% url 'like_shop' obj.pk %}" style="margin-right: 25px;margin-left: 5px;">
                             {% csrf_token %}
 
                             <input class="like_button" type="submit" value="Like" style="background-color: rgba(134, 207, 61, 0.9); border: none;">
                         </form>
 
-                        <form method="post" enctype="multipart/form-data" action="{% url 'dislike_shop' obj.pk %}" style="margin-left: 20px;">
+                        <form method="post" class="ajax_call" enctype="multipart/form-data" action="{% url 'dislike_shop' obj.pk %}" style="margin-left: 20px;">
                             {% csrf_token %}
                             <input class="danger_button" type="submit" value="Dislike" style="background-color: rgba(255, 51, 51, 0.9); border: none;">
                         </form>
