@@ -17,8 +17,9 @@ class Shop(models.Model):
 
 class User(AbstractUser):
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', ]
+    REQUIRED_FIELDS = []
     # override User.email:
+    username = None
     email = models.EmailField(unique=True, blank=False, null=False)
     liked_shops = models.ManyToManyField(Shop, related_name='liked_by')
     disliked_shops = models.ManyToManyField(Shop, through='ShopUser', related_name='disliked_by')
