@@ -3,6 +3,9 @@ from shops.views import ShopsListView, LikedShopsListView, LikeShopView, RemoveS
     DislikeShopView, CreateUserView
 
 urlpatterns = [
+    # default view is shops list
+    url(r'^$', ShopsListView.as_view()),
+
     url(r'^shops/$', ShopsListView.as_view(), name="list_of_shops"),
     url(r'^shops/liked/$', LikedShopsListView.as_view(), name="list_of_liked_shops"),
     url(r'^shops/(?P<shop>\d+)/like/$', LikeShopView.as_view(), name="like_shop"),
