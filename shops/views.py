@@ -93,4 +93,3 @@ class CreateUserView(CreateView):
         if user:
             login(self.request, user)
         return res
-
