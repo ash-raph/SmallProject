@@ -3,7 +3,7 @@ This small project is Django web site which help to list shops and also provide 
 dislike shops, the user can create an account using email address, a user can list his favorite shops and remove them 
 from this list, the user can also dislike shops those shops will disappear for two hours.
 
-##How To Use
+## How To Use
 Fist of all we need to install requirements:
 ```
 pip3 install -r requirements.txt
