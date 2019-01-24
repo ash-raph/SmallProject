@@ -6,9 +6,12 @@
 {% block content %}
     <form method="post" enctype="multipart/form-data" action="{{ request.path }}">
         {% csrf_token %}
-
-        {{form.as_table}}
-        <input type="submit">
+        <div class="register_inputs">
+            {{form}}
+            <input type="submit">
+        </div>
     </form>
-<a href="{% url 'create_user' %}">create new account</a>
+    <div class="urls_container">
+        <a href="{% url 'create_user' %}">create new account</a>
+    </div>
 {% endblock %}
